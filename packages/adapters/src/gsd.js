@@ -6,33 +6,37 @@ const DEFAULT_PATHS = ["/Users/me/Sites/get-shit-done"];
 export const gsdAdapter = {
   name: "gsd",
   async detect(ctx) {
-    const foundPath = detectFromPaths([ctx.targetDir, ...DEFAULT_PATHS].filter(Boolean));
+    const localAgent = path.join(ctx.projectPath, ".agent");
+    const foundPath = detectFromPaths([ctx.targetDir, localAgent, ...DEFAULT_PATHS].filter(Boolean));
     const hasBinary = await checkCommand("get-shit-done-cc", ["--help"]).catch(() => false);
     return {
       installed: Boolean(foundPath || hasBinary),
       path: foundPath || "global",
       version: null,
       diagnostics: [
-        { checkId: "binary", severity: hasBinary ? "info" : "error", message: hasBinary ? "get-shit-done-cc found" : "get-shit-done-cc missing" }
+        { checkId: "binary", severity: hasBinary ? "info" : "error", message: hasBinary ? "get-shit-done-cc found" : "get-shit-done-cc missing" },
+        { checkId: "local-agent", severity: Boolean(foundPath) ? "info" : "warn", message: Boolean(foundPath) ? ".agent folder found" : ".agent folder missing" }
       ]
     };
   },
   async bootstrap(ctx) {
     const isGlobal = ctx.scope === "global";
     const commands = [
-      isGlobal ? "npm install -g gsd-build/get-shit-done" : "npm install gsd-build/get-shit-done"
+      isGlobal 
+        ? "npx get-shit-done-cc --antigravity --global" 
+        : "npx get-shit-done-cc --antigravity --local"
     ];
     const results = await runBootstrapCommands(commands, {
       ...ctx,
-      cwd: isGlobal ? undefined : ctx.projectPath
+      cwd: ctx.projectPath
     });
     return {
       ok: results.length > 0 ? results.every(r => r.code === 0) : true,
       commands,
       results,
       note: isGlobal 
-        ? "GSD binary installed globally." 
-        : `GSD binary installed locally in ${ctx.projectPath}.`
+        ? "GSD installed globally for Antigravity." 
+        : `GSD installed locally in .agent folder.`
     };
   },
   async installUI(ctx) {
