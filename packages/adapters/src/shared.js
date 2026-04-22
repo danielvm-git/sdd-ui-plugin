@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { runCommand, spawnDetached, writeManifest } from "@sdd-ui/core";
+import { runCommand, spawnDetached, writeManifest } from "../../core/src/index.js";
 
 export function exists(targetPath) {
   return fs.existsSync(targetPath);

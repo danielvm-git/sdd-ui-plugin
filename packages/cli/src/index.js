@@ -1,7 +1,7 @@
 import os from "node:os";
 import path from "node:path";
-import { METHODS, resolveMethod, ensurePort, readManifest } from "@sdd-ui/core";
-import { getAdapter } from "@sdd-ui/adapters";
+import { METHODS, resolveMethod, ensurePort, readManifest } from "../../core/src/index.js";
+import { getAdapter } from "../../adapters/src/index.js";
 
 const argv = process.argv.slice(2);
 const firstArg = argv[0];
