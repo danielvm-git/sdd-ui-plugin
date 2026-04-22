@@ -4,7 +4,7 @@ import { METHODS, resolveMethod, ensurePort, readManifest } from "@sdd-ui/core";
 import { getAdapter } from "@sdd-ui/adapters";
 
 const argv = process.argv.slice(2);
-const command = argv[0] ?? "help";
+const firstArg = argv[0];
 const flags = parseFlags(argv.slice(1));
 const repoRoot = path.resolve(path.dirname(new URL(import.meta.url).pathname), "../../../");
 
@@ -18,7 +18,20 @@ const COMMANDS = {
   help: runHelp
 };
 
-COMMANDS[command]?.(flags).catch((error) => {
+let command = firstArg ?? "help";
+if (command === "--help" || command === "-h") {
+  command = "help";
+}
+
+if (!COMMANDS[command]) {
+  if (command !== "help") {
+    console.error(`Unknown command: ${command}`);
+  }
+  runHelp();
+  process.exit(command === "help" ? 0 : 1);
+}
+
+COMMANDS[command](flags).catch((error) => {
   console.error(`Error: ${error.message}`);
   process.exit(1);
 });
