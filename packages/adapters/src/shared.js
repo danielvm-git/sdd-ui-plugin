@@ -48,8 +48,12 @@ export async function runBootstrapCommands(commands, ctx) {
   if (ctx.dryRun) return results;
 
   for (const cmd of commands) {
+    console.log(`  [running] ${cmd}`);
     const [binary, ...args] = cmd.split(" ");
-    const result = await runCommand(binary, args, { shell: true });
+    const result = await runCommand(binary, args, { 
+      shell: true,
+      stdio: "inherit" // Pipe output directly to user terminal
+    });
     results.push({ command: cmd, ...result });
     if (result.code !== 0) break;
   }

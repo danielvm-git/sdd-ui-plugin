@@ -20,7 +20,7 @@
     "node": ">=20"
   },
   "dependencies": {
-    "bmad-method": "^6.3.0",
-    "get-shit-done-cc": "^1.38.3"
+    "bmad-method": "github:bmad-code-org/BMAD-METHOD",
+    "get-shit-done-cc": "github:gsd-build/get-shit-done"
   }
 }

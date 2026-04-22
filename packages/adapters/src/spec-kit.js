@@ -20,7 +20,7 @@ export const specKitAdapter = {
   async bootstrap(ctx) {
     const isGlobal = ctx.scope === "global";
     const commands = [
-      isGlobal ? "pipx install git+https://github.com/github/spec-kit.git" : "python3 -m pip install git+https://github.com/github/spec-kit.git"
+      isGlobal ? "pipx install git+https://github.com/github/spec-kit.git" : "python3 -m pip install git+https://github.com/github/spec-kit.git --break-system-packages"
     ];
     const results = await runBootstrapCommands(commands, {
       ...ctx,
