@@ -1,6 +1,6 @@
 import os from "node:os";
 import path from "node:path";
-import { METHODS, resolveMethod, ensurePort, readManifest } from "../../core/src/index.js";
+import { METHODS, resolveMethod, ensurePort, readManifest, openBrowser } from "../../core/src/index.js";
 import { getAdapter } from "../../adapters/src/index.js";
 
 const argv = process.argv.slice(2);
@@ -135,6 +135,8 @@ async function runStart(flags) {
   console.log(`${method} backend pid: ${start.pid}`);
   console.log(`${method} api: ${start.apiBase}`);
   console.log(`${method} ui: ${start.uiUrl}`);
+
+  await openBrowser(start.uiUrl);
 
   const shouldUseLive = Boolean(flags.live);
   if (shouldUseLive) {

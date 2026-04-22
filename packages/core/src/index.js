@@ -84,3 +84,26 @@ export function spawnDetached(command, args, options = {}) {
   return child.pid;
 }
 
+export async function openBrowser(url) {
+  const { exec } = await import("node:child_process");
+  const platform = process.platform;
+  let command;
+
+  if (platform === "darwin") {
+    command = `open "${url}"`;
+  } else if (platform === "win32") {
+    command = `start "" "${url}"`;
+  } else {
+    command = `xdg-open "${url}"`;
+  }
+
+  return new Promise((resolve) => {
+    exec(command, (error) => {
+      if (error) {
+        console.error(`Failed to open browser: ${error.message}`);
+      }
+      resolve();
+    });
+  });
+}
+
