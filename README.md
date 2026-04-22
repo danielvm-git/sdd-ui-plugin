@@ -52,17 +52,19 @@ npx github:danielvm-git/sdd-ui-plugin start gsd
 
 | Command | Action |
 | :--- | :--- |
-| `bootstrap <method|all>` | Detects and **auto-installs** method binaries and UI artifacts. |
-| `install <method|all>` | Re-installs UI artifacts and manifest files in the target project. |
-| `update <method|all>` | Forces a **refresh** of binaries and UI artifacts in an existing project. |
+| `bootstrap <method\|all>` | Detects and **auto-installs** method binaries and UI artifacts. |
+| `install <method\|all>` | Re-installs UI artifacts and manifest files in the target project. |
+| `update <method\|all>` | Forces a **refresh** of binaries and UI artifacts in an existing project. |
 | `start <method>` | Launches the UI backend and opens your browser. |
-| `status <method|all>` | Inspects the health and installation state of adapters. |
-| `doctor <method|all>` | Runs diagnostics (Node/Python versions, path accessibility). |
+| `status <method\|all>` | Inspects the health and installation state of adapters. |
+| `doctor <method\|all>` | Runs diagnostics (Node/Python versions, path accessibility). |
 | `version` | Displays the current CLI and core version. |
 
 ### Global Flags
 - `--target-dir <path>`: Directory to bootstrap (defaults to `.`).
 - `--project <path>`: Specific project path for `install` and `start`.
+- `--global`: Force global installation during bootstrap (skips prompt).
+- `--local`: Force local installation during bootstrap (skips prompt).
 - `--dry-run`: Preview actions without making changes.
 - `--port <number>`: Override default UI port.
 
@@ -102,8 +104,12 @@ npm install
 
 ### Running Locally
 ```bash
-# Run the CLI from source
-npm start -- --help
+# Run the CLI from source (with your local changes)
+npm start -- start gsd
+
+# Or use the link for a global command
+npm link
+sdd-ui start gsd
 ```
 
 ### Testing

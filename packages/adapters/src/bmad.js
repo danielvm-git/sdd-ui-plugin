@@ -7,26 +7,32 @@ export const bmadAdapter = {
   name: "bmad",
   async detect(ctx) {
     const foundPath = detectFromPaths([ctx.targetDir, ...DEFAULT_PATHS].filter(Boolean));
-    const hasNode = await checkCommand("node").catch(() => false);
+    const hasBinary = await checkCommand("bmad-method", ["--version"]).catch(() => false);
     return {
-      installed: Boolean(foundPath),
-      path: foundPath,
+      installed: Boolean(foundPath || hasBinary),
+      path: foundPath || "global",
       version: null,
-      diagnostics: [{ checkId: "node", severity: hasNode ? "info" : "error", message: hasNode ? "node found" : "node missing" }]
+      diagnostics: [
+        { checkId: "binary", severity: hasBinary ? "info" : "error", message: hasBinary ? "bmad-method found" : "bmad-method missing" }
+      ]
     };
   },
   async bootstrap(ctx) {
+    const isGlobal = ctx.scope === "global";
     const commands = [
-      "npx bmad-method install"
+      isGlobal ? "npm install -g bmad-method" : "npm install bmad-method"
     ];
-    const results = await runBootstrapCommands(commands, ctx);
+    const results = await runBootstrapCommands(commands, {
+      ...ctx,
+      cwd: isGlobal ? undefined : ctx.projectPath
+    });
     return {
       ok: results.length > 0 ? results.every(r => r.code === 0) : true,
       commands,
       results,
-      note: ctx.dryRun 
-        ? "BMAD bootstrap is command-suggested. Execution skipped in dry-run." 
-        : "BMAD bootstrap auto-executed."
+      note: isGlobal 
+        ? "BMAD binary installed globally." 
+        : `BMAD binary installed locally in ${ctx.projectPath}.`
     };
   },
   async installUI(ctx) {

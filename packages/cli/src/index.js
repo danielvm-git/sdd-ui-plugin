@@ -1,7 +1,20 @@
 import os from "node:os";
 import path from "node:path";
+import readline from "node:readline/promises";
 import { METHODS, resolveMethod, ensurePort, readManifest, openBrowser } from "../../core/src/index.js";
 import { getAdapter } from "../../adapters/src/index.js";
+
+async function ask(question) {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+  try {
+    return await rl.question(question);
+  } finally {
+    rl.close();
+  }
+}
 
 const argv = process.argv.slice(2);
 const firstArg = argv[0];
@@ -79,14 +92,21 @@ function baseCtx(flags) {
 
 async function runBootstrap(flags) {
   const ctx = baseCtx(flags);
+  let scope = flags.global ? "global" : flags.local ? "local" : undefined;
+
+  if (!scope && !ctx.dryRun) {
+    const answer = await ask("[bootstrap] Install methods globally or locally in current project? (global/local) [local]: ");
+    scope = answer.toLowerCase().startsWith("g") ? "global" : "local";
+  }
+
   for (const method of selectedMethods(flags)) {
     const adapter = getAdapter(method);
     const detection = await adapter.detect(ctx);
     if (detection.installed && !flags["force-bootstrap"]) {
       console.log(`[${method}] detected at ${detection.path}`);
     } else {
-      console.log(`[${method}] bootstrap starting...`);
-      const bootstrap = await adapter.bootstrap(ctx);
+      console.log(`[${method}] bootstrap starting (${scope ?? "local"})...`);
+      const bootstrap = await adapter.bootstrap({ ...ctx, scope: scope ?? "local" });
       if (ctx.dryRun) {
         console.log(`[${method}] bootstrap planned (dry-run):`);
         for (const line of bootstrap.commands ?? []) console.log(`  - ${line}`);

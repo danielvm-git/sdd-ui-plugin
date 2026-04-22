@@ -7,26 +7,32 @@ export const specKitAdapter = {
   name: "spec-kit",
   async detect(ctx) {
     const foundPath = detectFromPaths([ctx.targetDir, ...DEFAULT_PATHS].filter(Boolean));
-    const hasPython = await checkCommand("python3", ["--version"]).catch(() => false);
+    const hasBinary = await checkCommand("specify-cli", ["--version"]).catch(() => false);
     return {
-      installed: Boolean(foundPath),
-      path: foundPath,
+      installed: Boolean(foundPath || hasBinary),
+      path: foundPath || "global",
       version: null,
-      diagnostics: [{ checkId: "python3", severity: hasPython ? "info" : "error", message: hasPython ? "python3 found" : "python3 missing" }]
+      diagnostics: [
+        { checkId: "binary", severity: hasBinary ? "info" : "error", message: hasBinary ? "specify-cli found" : "specify-cli missing" }
+      ]
     };
   },
   async bootstrap(ctx) {
+    const isGlobal = ctx.scope === "global";
     const commands = [
-      "pipx install specify-cli"
+      isGlobal ? "pipx install specify-cli" : "pip install specify-cli"
     ];
-    const results = await runBootstrapCommands(commands, ctx);
+    const results = await runBootstrapCommands(commands, {
+      ...ctx,
+      cwd: isGlobal ? undefined : ctx.projectPath
+    });
     return {
       ok: results.length > 0 ? results.every(r => r.code === 0) : true,
       commands,
       results,
-      note: ctx.dryRun 
-        ? "Spec-Kit bootstrap is command-suggested. Execution skipped in dry-run." 
-        : "Spec-Kit bootstrap auto-executed."
+      note: isGlobal 
+        ? "Spec-Kit binary installed globally via pipx." 
+        : `Spec-Kit binary installed locally in ${ctx.projectPath}.`
     };
   },
   async installUI(ctx) {

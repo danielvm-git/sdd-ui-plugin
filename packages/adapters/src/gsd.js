@@ -7,26 +7,32 @@ export const gsdAdapter = {
   name: "gsd",
   async detect(ctx) {
     const foundPath = detectFromPaths([ctx.targetDir, ...DEFAULT_PATHS].filter(Boolean));
-    const hasNode = await checkCommand("node").catch(() => false);
+    const hasBinary = await checkCommand("get-shit-done-cc", ["--help"]).catch(() => false);
     return {
-      installed: Boolean(foundPath),
-      path: foundPath,
+      installed: Boolean(foundPath || hasBinary),
+      path: foundPath || "global",
       version: null,
-      diagnostics: [{ checkId: "node", severity: hasNode ? "info" : "error", message: hasNode ? "node found" : "node missing" }]
+      diagnostics: [
+        { checkId: "binary", severity: hasBinary ? "info" : "error", message: hasBinary ? "get-shit-done-cc found" : "get-shit-done-cc missing" }
+      ]
     };
   },
   async bootstrap(ctx) {
+    const isGlobal = ctx.scope === "global";
     const commands = [
-      "npx get-shit-done-cc --help"
+      isGlobal ? "npm install -g get-shit-done-cc" : "npm install get-shit-done-cc"
     ];
-    const results = await runBootstrapCommands(commands, ctx);
+    const results = await runBootstrapCommands(commands, {
+      ...ctx,
+      cwd: isGlobal ? undefined : ctx.projectPath
+    });
     return {
       ok: results.length > 0 ? results.every(r => r.code === 0) : true,
       commands,
       results,
-      note: ctx.dryRun 
-        ? "GSD bootstrap is command-suggested. Execution skipped in dry-run." 
-        : "GSD bootstrap auto-executed."
+      note: isGlobal 
+        ? "GSD binary installed globally." 
+        : `GSD binary installed locally in ${ctx.projectPath}.`
     };
   },
   async installUI(ctx) {
