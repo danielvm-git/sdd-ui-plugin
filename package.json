@@ -7,6 +7,9 @@
   "workspaces": [
     "packages/*"
   ],
+  "bin": {
+    "sdd-ui": "./packages/cli/bin/sdd-ui.js"
+  },
   "scripts": {
     "build": "echo \"No build step required\"",
     "test": "node --test packages/core/src/*.test.js packages/adapters/src/*.test.js",

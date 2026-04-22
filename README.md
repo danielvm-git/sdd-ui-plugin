@@ -1,81 +1,134 @@
-# SDD UI Plugin
+# 🚀 SDD UI Plugin
 
-Unified CLI and UI packages for `bmad`, `gsd`, and `spec-kit`. This plugin provides a seamless bridge between terminal-based productivity tools and modern, interactive web interfaces.
+> **Unified UI bridge for BMAD, GSD, and Spec-Kit methods.**
 
-## 🚀 Quick Start
+![SDD UI Hero Image](docs/assets/hero.png)
 
-### Bootstrap a Workspace
-The `bootstrap` command handles both the detection of existing tools and the **automatic installation** of missing dependencies for each method adapter.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![npm version](https://img.shields.io/badge/npm-0.1.0-blue.svg)](https://www.npmjs.com/)
+[![Node.js Version](https://img.shields.io/badge/node-%3E%3D20-green.svg)](https://nodejs.org/)
+
+---
+
+## 💡 Why SDD UI?
+
+In the world of CLI productivity tools, context is often scattered across terminal windows. **SDD UI Plugin** bridges this gap by providing a **unified, interactive web interface** for your favorite workflow methods: `bmad`, `gsd`, and `spec-kit`.
+
+Stop juggling terminal tabs and start visualizing your progress with a modern, data-driven dashboard.
+
+---
+
+## ✨ Key Features
+
+- **🎯 Unified Bootstrap**: One command to detect and install all necessary binaries and UI artifacts.
+- **📊 Real-time Visualization**: Interactive dashboards for roadmaps, state management, and specifications.
+- **🔌 Method Adapters**: Specialized adapters for BMAD, GSD, and Spec-Kit that handle the heavy lifting.
+- **🚀 One-Click Launch**: Seamlessly transition from CLI to Browser with `sdd-ui start`.
+- **🛠 Health Checks**: Built-in `doctor` command to ensure your environment is primed for productivity.
+
+---
+
+## 🚦 Quick Start
+
+### 1. Bootstrap your project
+Initialize a new workspace or add SDD UI to an existing one. The `bootstrap` command automatically detects missing tools and installs them.
 
 ```bash
-# Using npx (pre-publish)
-npx github:danielvm-git/sdd-ui-plugin bootstrap all --target-dir ./my-project
-
-# Using published package
-npx @sdd-ui/cli bootstrap all --target-dir ./my-project
+# Bootstrap everything in the current directory
+npx github:danielvm-git/sdd-ui-plugin bootstrap all --target-dir ./
 ```
 
-## 🛠 Commands
+### 2. Start the UI
+Launch the interactive dashboard for a specific method.
 
-| Command | Description |
+```bash
+# Launch the GSD (Get-Shit-Done) UI
+npx github:danielvm-git/sdd-ui-plugin start gsd
+```
+
+---
+
+## 🛠 Command Reference
+
+| Command | Action |
 | :--- | :--- |
-| `bootstrap <method\|all>` | Detects and **auto-installs** method binaries and UI artifacts. |
-| `install <method\|all>` | Re-installs UI artifacts and manifest files in the target project. |
-| `start <method>` | Launches the Python-based UI backend and opens the frontend. |
-| `status <method\|all>` | Inspects the health and installation state of adapters. |
-| `doctor <method\|all>` | Runs diagnostics (Node/Python versions, path accessibility). |
+| `bootstrap <method|all>` | Detects and **auto-installs** method binaries and UI artifacts. |
+| `install <method|all>` | Re-installs UI artifacts and manifest files in the target project. |
+| `start <method>` | Launches the UI backend and opens your browser. |
+| `status <method|all>` | Inspects the health and installation state of adapters. |
+| `doctor <method|all>` | Runs diagnostics (Node/Python versions, path accessibility). |
 | `version` | Displays the current CLI and core version. |
 
 ### Global Flags
-- `--target-dir <path>`: Directory to bootstrap/inspect (defaults to current dir).
-- `--project <path>`: Specific project path for `install`, `start`, and `status`.
-- `--dry-run`: Preview bootstrap actions without executing installs.
+- `--target-dir <path>`: Directory to bootstrap (defaults to `.`).
+- `--project <path>`: Specific project path for `install` and `start`.
+- `--dry-run`: Preview actions without making changes.
 - `--port <number>`: Override default UI port.
-- `--live`: (Start only) Enables real-time event streaming from the method adapter.
+
+---
 
 ## 🏗 Architecture
 
-The project is organized as a monorepo containing several specialized packages:
+SDD UI is built as a modular monorepo for maximum extensibility:
 
-- **`packages/cli`**: The user-facing command-line interface.
-- **`packages/core`**: Shared contracts, manifest management, and process execution helpers.
-- **`packages/adapters`**: The "brain" of the plugin. Contains adapters for `bmad`, `gsd`, and `spec-kit` that implement the standard lifecycle (Detect -> Bootstrap -> Start).
-- **`packages/ui-*`**: Standalone UI packages containing a Python (Flask/FastAPI-style) backend and a modern frontend.
+- **`packages/cli`**: The unified entry point for all commands.
+- **`packages/core`**: Shared logic for process execution and manifest management.
+- **`packages/adapters`**: The logic layer that translates method-specific data into the SDD format.
+- **`packages/ui-*`**: Modern React/Vite frontends and Python-based backends for each method.
 
-## 🔌 Method Adapters
+```mermaid
+graph TD
+    CLI[packages/cli] --> Core[packages/core]
+    CLI --> Adapters[packages/adapters]
+    Adapters --> BMAD[Method: BMAD]
+    Adapters --> GSD[Method: GSD]
+    Adapters --> SpecKit[Method: Spec-Kit]
+    Adapters --> UI[packages/ui-*]
+    UI --> Backend[Python Backend]
+    UI --> Frontend[React Frontend]
+```
 
-Each adapter is responsible for bridging a specific method to the unified SDD UI:
+---
 
-- **BMAD**: Integrated with `bmad-method`. Auto-installs via `npx`.
-- **GSD (Get-Shit-Done)**: Integrated with `get-shit-done-cc`. Auto-installs via `npx`.
-- **Spec-Kit**: Integrated with `specify-cli`. Auto-installs via `pipx`.
+## 👩‍💻 Development
 
-## 🛠 Development
-
-### Local Setup
+### Setup
 ```bash
 git clone https://github.com/danielvm-git/sdd-ui-plugin.git
 cd sdd-ui-plugin
 npm install
 ```
 
-### Running CLI Locally
-From the project root:
+### Running Locally
 ```bash
+# Run the CLI from source
 npm start -- --help
 ```
-*(Note: You can also use `node packages/cli/bin/sdd-ui.js --help`, but `npm start` handles the pathing nicely).*
 
 ### Testing
-To run all tests across packages from the root:
 ```bash
-npm test
-```
-To run tests for a specific package:
-```bash
-cd packages/adapters
+# Run all tests
 npm test
 ```
 
+---
+
 ## 📄 License
-MIT
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+---
+
+## 🤝 Contributing
+
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+**Built with ❤️ for the Developer Community.**
