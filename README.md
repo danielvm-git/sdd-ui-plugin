@@ -60,11 +60,18 @@ npm install
 ```
 
 ### Running CLI Locally
+From the project root:
 ```bash
-node packages/cli/bin/sdd-ui.js --help
+npm start -- --help
 ```
+*(Note: You can also use `node packages/cli/bin/sdd-ui.js --help`, but `npm start` handles the pathing nicely).*
 
-### Testing Adapters
+### Testing
+To run all tests across packages from the root:
+```bash
+npm test
+```
+To run tests for a specific package:
 ```bash
 cd packages/adapters
 npm test
