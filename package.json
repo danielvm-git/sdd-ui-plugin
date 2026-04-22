@@ -1,0 +1,19 @@
+{
+  "name": "sdd-ui-plugin",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Unified UI launcher for BMAD, GSD, and Spec-Kit methods.",
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "echo \"No build step required\"",
+    "test": "node --test packages/core/src/*.test.js packages/adapters/src/*.test.js",
+    "lint": "echo \"No linter configured\"",
+    "start": "node packages/cli/src/index.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

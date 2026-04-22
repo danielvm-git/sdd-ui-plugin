@@ -1,0 +1,13 @@
+{
+  "name": "@sdd-ui/cli",
+  "version": "0.1.0",
+  "type": "module",
+  "bin": {
+    "sdd-ui": "bin/sdd-ui.js"
+  },
+  "main": "src/index.js",
+  "dependencies": {
+    "@sdd-ui/adapters": "0.1.0",
+    "@sdd-ui/core": "0.1.0"
+  }
+}

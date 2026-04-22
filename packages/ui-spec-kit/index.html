@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spec-Kit UI</title>
+  <style>
+    body { font-family: -apple-system, sans-serif; background: #0f172a; color: #f8fafc; margin: 0; }
+    header { padding: 24px; border-bottom: 1px solid #1e293b; }
+    main { padding: 24px; display: grid; gap: 16px; }
+    .card { background: #111827; border: 1px solid #334155; border-radius: 12px; padding: 16px; }
+    ul { margin: 0; padding-left: 20px; }
+    pre { white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Spec-Kit UI</h1>
+    <p>Specs, plans, and tasks browser for spec-driven projects.</p>
+  </header>
+  <main>
+    <section class="card"><h2>Stats</h2><pre id="stats">Loading...</pre></section>
+    <section class="card"><h2>Specs</h2><ul id="specs"></ul></section>
+    <section class="card"><h2>Plans</h2><ul id="plans"></ul></section>
+    <section class="card"><h2>Tasks</h2><ul id="tasks"></ul></section>
+  </main>
+  <script>
+    const API_BASE = window.SDD_UI_API_BASE || "http://127.0.0.1:3005/api";
+    const asJson = (path) => fetch(`${API_BASE}${path}`).then((r) => r.json());
+    async function render() {
+      const [stats, specs, plans, tasks] = await Promise.all([
+        asJson("/stats"), asJson("/specs"), asJson("/plans"), asJson("/tasks")
+      ]);
+      document.getElementById("stats").textContent = JSON.stringify(stats, null, 2);
+      document.getElementById("specs").innerHTML = specs.map((s) => `<li>${s.title}</li>`).join("") || "<li>No specs.</li>";
+      document.getElementById("plans").innerHTML = plans.map((s) => `<li>${s.title}</li>`).join("") || "<li>No plans.</li>";
+      document.getElementById("tasks").innerHTML = tasks.map((s) => `<li>${s.title} (${s.status || "todo"})</li>`).join("") || "<li>No tasks.</li>";
+    }
+    render().catch((e) => {
+      document.getElementById("stats").textContent = `Failed to load API: ${e.message}`;
+    });
+  </script>
+</body>
+</html>
+
