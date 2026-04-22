@@ -1,5 +1,5 @@
 import path from "node:path";
-import { checkCommand, detectFromPaths, installUiArtifacts, startPythonUi } from "./shared.js";
+import { checkCommand, detectFromPaths, installUiArtifacts, startPythonUi, runBootstrapCommands } from "./shared.js";
 
 const DEFAULT_PATHS = ["/Users/me/Sites/get-shit-done"];
 
@@ -15,13 +15,18 @@ export const gsdAdapter = {
       diagnostics: [{ checkId: "node", severity: hasNode ? "info" : "error", message: hasNode ? "node found" : "node missing" }]
     };
   },
-  async bootstrap() {
+  async bootstrap(ctx) {
+    const commands = [
+      "npx get-shit-done-cc --help"
+    ];
+    const results = await runBootstrapCommands(commands, ctx);
     return {
-      ok: true,
-      commands: [
-        "npx get-shit-done-cc --help"
-      ],
-      note: "GSD bootstrap is command-suggested. Adapter wiring can be expanded for auto-install."
+      ok: results.length > 0 ? results.every(r => r.code === 0) : true,
+      commands,
+      results,
+      note: ctx.dryRun 
+        ? "GSD bootstrap is command-suggested. Execution skipped in dry-run." 
+        : "GSD bootstrap auto-executed."
     };
   },
   async installUI(ctx) {

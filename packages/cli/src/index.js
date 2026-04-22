@@ -71,9 +71,20 @@ async function runBootstrap(flags) {
     if (detection.installed && !flags["force-bootstrap"]) {
       console.log(`[${method}] detected at ${detection.path}`);
     } else {
+      console.log(`[${method}] bootstrap starting...`);
       const bootstrap = await adapter.bootstrap(ctx);
-      console.log(`[${method}] bootstrap planned:`);
-      for (const line of bootstrap.commands ?? []) console.log(`  - ${line}`);
+      if (ctx.dryRun) {
+        console.log(`[${method}] bootstrap planned (dry-run):`);
+        for (const line of bootstrap.commands ?? []) console.log(`  - ${line}`);
+      } else {
+        for (const res of bootstrap.results ?? []) {
+          const status = res.code === 0 ? "SUCCESS" : "FAILED";
+          console.log(`  [${status}] ${res.command}`);
+          if (res.code !== 0 && res.stderr) {
+            console.error(`    Error: ${res.stderr.trim()}`);
+          }
+        }
+      }
       if (bootstrap.note) console.log(`  note: ${bootstrap.note}`);
     }
     const installed = await adapter.installUI(ctx);

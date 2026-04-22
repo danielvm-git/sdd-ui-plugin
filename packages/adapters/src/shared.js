@@ -43,3 +43,16 @@ export function startPythonUi({ packagePath, port, projectPath, apiBase }) {
   return { pid, uiUrl, apiBase };
 }
 
+export async function runBootstrapCommands(commands, ctx) {
+  const results = [];
+  if (ctx.dryRun) return results;
+
+  for (const cmd of commands) {
+    const [binary, ...args] = cmd.split(" ");
+    const result = await runCommand(binary, args, { shell: true });
+    results.push({ command: cmd, ...result });
+    if (result.code !== 0) break;
+  }
+  return results;
+}
+

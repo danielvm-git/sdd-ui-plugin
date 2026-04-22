@@ -1,5 +1,5 @@
 import path from "node:path";
-import { checkCommand, detectFromPaths, installUiArtifacts, startPythonUi } from "./shared.js";
+import { checkCommand, detectFromPaths, installUiArtifacts, startPythonUi, runBootstrapCommands } from "./shared.js";
 
 const DEFAULT_PATHS = ["/Users/me/Sites/spec-kit"];
 
@@ -15,13 +15,18 @@ export const specKitAdapter = {
       diagnostics: [{ checkId: "python3", severity: hasPython ? "info" : "error", message: hasPython ? "python3 found" : "python3 missing" }]
     };
   },
-  async bootstrap() {
+  async bootstrap(ctx) {
+    const commands = [
+      "pipx install specify-cli"
+    ];
+    const results = await runBootstrapCommands(commands, ctx);
     return {
-      ok: true,
-      commands: [
-        "pipx install specify-cli"
-      ],
-      note: "Spec-Kit bootstrap is command-suggested. Adapter wiring can be expanded for auto-install."
+      ok: results.length > 0 ? results.every(r => r.code === 0) : true,
+      commands,
+      results,
+      note: ctx.dryRun 
+        ? "Spec-Kit bootstrap is command-suggested. Execution skipped in dry-run." 
+        : "Spec-Kit bootstrap auto-executed."
     };
   },
   async installUI(ctx) {

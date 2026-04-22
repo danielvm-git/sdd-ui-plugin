@@ -1,5 +1,5 @@
 import path from "node:path";
-import { checkCommand, detectFromPaths, installUiArtifacts, startPythonUi } from "./shared.js";
+import { checkCommand, detectFromPaths, installUiArtifacts, startPythonUi, runBootstrapCommands } from "./shared.js";
 
 const DEFAULT_PATHS = ["/Users/me/Sites/BMAD-METHOD"];
 
@@ -16,12 +16,17 @@ export const bmadAdapter = {
     };
   },
   async bootstrap(ctx) {
+    const commands = [
+      "npx bmad-method install"
+    ];
+    const results = await runBootstrapCommands(commands, ctx);
     return {
-      ok: true,
-      commands: [
-        "npx bmad-method install"
-      ],
-      note: "BMAD bootstrap is command-suggested. Run with --yes integration in a future iteration."
+      ok: results.length > 0 ? results.every(r => r.code === 0) : true,
+      commands,
+      results,
+      note: ctx.dryRun 
+        ? "BMAD bootstrap is command-suggested. Execution skipped in dry-run." 
+        : "BMAD bootstrap auto-executed."
     };
   },
   async installUI(ctx) {
