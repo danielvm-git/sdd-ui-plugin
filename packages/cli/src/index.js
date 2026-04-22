@@ -11,6 +11,7 @@ const repoRoot = path.resolve(path.dirname(new URL(import.meta.url).pathname), "
 const COMMANDS = {
   bootstrap: runBootstrap,
   install: runInstall,
+  update: runUpdate,
   start: runStart,
   status: runStatus,
   doctor: runDoctor,
@@ -118,6 +119,12 @@ async function runInstall(flags) {
   }
 }
 
+async function runUpdate(flags) {
+  console.log("Updating SDD UI artifacts and checking method binaries...");
+  // Update is essentially a forced bootstrap to ensure everything is latest
+  return runBootstrap({ ...flags, "force-bootstrap": true });
+}
+
 async function runStart(flags) {
   const method = resolveMethod(flags._[0] ?? "");
   const adapter = getAdapter(method);
@@ -203,6 +210,7 @@ async function runHelp() {
   console.log("sdd-ui commands:");
   console.log("  sdd-ui bootstrap <bmad|gsd|spec-kit|all> [--target-dir <path>] [--dry-run]");
   console.log("  sdd-ui install <bmad|gsd|spec-kit|all> [--project <path>]");
+  console.log("  sdd-ui update <bmad|gsd|spec-kit|all> [--project <path>]");
   console.log("  sdd-ui start <bmad|gsd|spec-kit> --project <path> [--port <number>] [--auto-bootstrap]");
   console.log("  sdd-ui status <bmad|gsd|spec-kit|all> [--project <path>]");
   console.log("  sdd-ui doctor <bmad|gsd|spec-kit|all> [--target-dir <path>]");

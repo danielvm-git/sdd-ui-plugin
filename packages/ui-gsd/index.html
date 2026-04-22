@@ -25,7 +25,7 @@
     <section class="card"><h2>State</h2><pre id="state"></pre></section>
   </main>
   <script>
-    const API_BASE = window.SDD_UI_API_BASE || "http://127.0.0.1:3006/api";
+    const API_BASE = window.SDD_UI_API_BASE || (window.location.protocol === "file:" ? "http://127.0.0.1:3006/api" : "/api");
     const asJson = (path) => fetch(`${API_BASE}${path}`).then((r) => r.json());
     async function render() {
       const [stats, roadmap, phases, state] = await Promise.all([

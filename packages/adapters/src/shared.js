@@ -39,7 +39,7 @@ export function startPythonUi({ packagePath, port, projectPath, apiBase }) {
     SDD_UI_API_BASE: apiBase
   };
   const pid = spawnDetached("python3", ["app.py"], { cwd: packagePath, env });
-  const uiUrl = `file://${path.join(packagePath, "index.html")}`;
+  const uiUrl = `http://127.0.0.1:${port}/`;
   return { pid, uiUrl, apiBase };
 }
 

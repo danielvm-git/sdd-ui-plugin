@@ -54,6 +54,7 @@ npx github:danielvm-git/sdd-ui-plugin start gsd
 | :--- | :--- |
 | `bootstrap <method|all>` | Detects and **auto-installs** method binaries and UI artifacts. |
 | `install <method|all>` | Re-installs UI artifacts and manifest files in the target project. |
+| `update <method|all>` | Forces a **refresh** of binaries and UI artifacts in an existing project. |
 | `start <method>` | Launches the UI backend and opens your browser. |
 | `status <method|all>` | Inspects the health and installation state of adapters. |
 | `doctor <method|all>` | Runs diagnostics (Node/Python versions, path accessibility). |
