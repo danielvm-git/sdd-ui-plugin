@@ -18,5 +18,9 @@
   },
   "engines": {
     "node": ">=20"
+  },
+  "dependencies": {
+    "bmad-method": "^6.3.0",
+    "get-shit-done-cc": "^1.38.3"
   }
 }

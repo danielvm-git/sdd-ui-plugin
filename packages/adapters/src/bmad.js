@@ -20,7 +20,7 @@ export const bmadAdapter = {
   async bootstrap(ctx) {
     const isGlobal = ctx.scope === "global";
     const commands = [
-      isGlobal ? "npm install -g bmad-method" : "npm install bmad-method"
+      isGlobal ? "npm install -g bmad-code-org/BMAD-METHOD" : "npm install bmad-code-org/BMAD-METHOD"
     ];
     const results = await runBootstrapCommands(commands, {
       ...ctx,

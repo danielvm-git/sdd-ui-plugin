@@ -20,7 +20,7 @@ export const gsdAdapter = {
   async bootstrap(ctx) {
     const isGlobal = ctx.scope === "global";
     const commands = [
-      isGlobal ? "npm install -g get-shit-done-cc" : "npm install get-shit-done-cc"
+      isGlobal ? "npm install -g gsd-build/get-shit-done" : "npm install gsd-build/get-shit-done"
     ];
     const results = await runBootstrapCommands(commands, {
       ...ctx,

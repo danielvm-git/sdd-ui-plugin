@@ -28,6 +28,16 @@ Stop juggling terminal tabs and start visualizing your progress with a modern, d
 
 ---
 
+## 🔗 Method Repositories
+
+| Method | Repository |
+| :--- | :--- |
+| **GSD** | [gsd-build/get-shit-done](https://github.com/gsd-build/get-shit-done) |
+| **BMAD** | [bmad-code-org/BMAD-METHOD](https://github.com/bmad-code-org/BMAD-METHOD) |
+| **Spec-Kit** | [github/spec-kit](https://github.com/github/spec-kit) |
+
+---
+
 ## 🚦 Quick Start
 
 ### 1. Bootstrap your project
