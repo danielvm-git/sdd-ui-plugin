@@ -37,6 +37,8 @@ class GSDHandler(http.server.SimpleHTTPRequestHandler):
             self.send_file_content("STATE.md")
         elif self.path == "/api/codebase":
             self.send_codebase()
+        elif self.path == "/api/bmm":
+            self.send_bmm_data()
         else:
             super().do_GET()
 
@@ -45,9 +47,18 @@ class GSDHandler(http.server.SimpleHTTPRequestHandler):
             "milestone": "v1.0.0",
             "progress": 65,
             "phasesCount": len(self.get_roadmap_phases()),
-            "plansCount": self.count_files_by_pattern(r".*-PLAN\.md")
+            "plansCount": self.count_files_by_pattern(r".*-PLAN\.md") + self.count_codebase_docs()
         }
         self.send_json(stats)
+
+    def count_codebase_docs(self):
+        count = 0
+        codebase_dir = os.path.join(TARGET_DIR, ".planning", "codebase")
+        if os.path.exists(codebase_dir):
+            for file_name in os.listdir(codebase_dir):
+                if file_name.endswith(".md"):
+                    count += 1
+        return count
 
     def count_files_by_pattern(self, pattern):
         count = 0
@@ -64,6 +75,9 @@ class GSDHandler(http.server.SimpleHTTPRequestHandler):
 
     def get_roadmap_phases(self):
         roadmap_path = os.path.join(TARGET_DIR, "ROADMAP.md")
+        if not os.path.exists(roadmap_path):
+            roadmap_path = os.path.join(TARGET_DIR, ".planning", "ROADMAP.md")
+            
         phases = []
         if os.path.exists(roadmap_path):
             with open(roadmap_path, "r", encoding="utf-8") as handle:
@@ -119,8 +133,26 @@ class GSDHandler(http.server.SimpleHTTPRequestHandler):
                         })
         self.send_json(docs)
 
+    def send_bmm_data(self):
+        # We simulate the BMM workflow data based on skills and directories
+        skills_path = os.path.join(TARGET_DIR, ".agent", "skills")
+        if not os.path.exists(skills_path):
+            skills_path = os.path.join(TARGET_DIR, "packages", "adapters", "src", "bmm-skills") # Fallback for plugin repo
+            
+        data = {
+            "Discovery": {"status": "completed", "icon": "🔍"},
+            "Planning": {"status": "in-progress", "icon": "📋"},
+            "Solutioning": {"status": "pending", "icon": "🏗️"},
+            "Implementation": {"status": "pending", "icon": "⚡"}
+        }
+        # In a real scenario, this would parse yaml files. For now we provide the structure.
+        self.send_json(data)
+
     def send_file_content(self, filename):
         file_path = os.path.join(TARGET_DIR, filename)
+        if not os.path.exists(file_path):
+            file_path = os.path.join(TARGET_DIR, ".planning", filename)
+            
         if os.path.exists(file_path):
             with open(file_path, "r", encoding="utf-8") as handle:
                 content = handle.read()

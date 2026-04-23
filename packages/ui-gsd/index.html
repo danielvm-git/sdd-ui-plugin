@@ -3,43 +3,214 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GSD UI</title>
+  <title>GSD Dashboard</title>
   <style>
-    body { font-family: -apple-system, sans-serif; background: #09090b; color: #f8fafc; margin: 0; }
-    header { padding: 24px; border-bottom: 1px solid #27272a; }
-    main { padding: 24px; display: grid; gap: 16px; }
-    .card { background: #18181b; border: 1px solid #27272a; border-radius: 12px; padding: 16px; }
-    ul { margin: 0; padding-left: 20px; }
-    pre { white-space: pre-wrap; }
+    :root {
+      --bg: #09090b;
+      --card: #18181b;
+      --border: #27272a;
+      --primary: #3b82f6;
+      --text: #f8fafc;
+      --text-dim: #94a3b8;
+    }
+    body { 
+      font-family: 'Inter', -apple-system, sans-serif; 
+      background: var(--bg); 
+      color: var(--text); 
+      margin: 0; 
+      display: flex; 
+      height: 100vh;
+      overflow: hidden;
+    }
+    aside {
+      width: 260px;
+      border-right: 1px solid var(--border);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+    nav {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .nav-item {
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      color: var(--text-dim);
+      transition: 0.2s;
+    }
+    .nav-item:hover { background: var(--card); color: var(--text); }
+    .nav-item.active { background: var(--primary); color: white; }
+    
+    main {
+      flex: 1;
+      padding: 40px;
+      overflow-y: auto;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+    }
+    h1, h2, h3 { margin-top: 0; }
+    pre {
+      background: #000;
+      padding: 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1.6;
+      overflow-x: auto;
+      color: #7dd3fc;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 99px;
+      font-size: 12px;
+      background: var(--border);
+      margin-bottom: 8px;
+    }
+    .phase-list { list-style: none; padding: 0; }
+    .phase-item {
+      padding: 12px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+    }
   </style>
 </head>
 <body>
-  <header>
-    <h1>GSD UI</h1>
-    <p>Roadmap, phases, and state for Get Shit Done projects.</p>
-  </header>
-  <main>
-    <section class="card"><h2>Stats</h2><pre id="stats">Loading...</pre></section>
-    <section class="card"><h2>Roadmap</h2><ul id="roadmap"></ul></section>
-    <section class="card"><h2>Phases</h2><ul id="phases"></ul></section>
-    <section class="card"><h2>State</h2><pre id="state"></pre></section>
+  <aside>
+    <div class="logo">
+      <h2 style="color: var(--primary); margin: 0;">GSD UI</h2>
+      <p style="font-size: 12px; color: var(--text-dim);">Get Shit Done Dashboard</p>
+    </div>
+    <nav>
+      <div class="nav-item active" onclick="show('overview')">Overview</div>
+      <div class="nav-item" onclick="show('roadmap')">Roadmap</div>
+      <div class="nav-item" onclick="show('phases')">Phases</div>
+      <div class="nav-item" onclick="show('codebase')">Codebase Map</div>
+      <div class="nav-item" onclick="show('bmm')">BMM Status</div>
+    </nav>
+  </aside>
+
+  <main id="content">
+    <!-- Content injected here -->
   </main>
+
   <script>
     const API_BASE = window.SDD_UI_API_BASE || (window.location.protocol === "file:" ? "http://127.0.0.1:3006/api" : "/api");
     const asJson = (path) => fetch(`${API_BASE}${path}`).then((r) => r.json());
-    async function render() {
-      const [stats, roadmap, phases, state] = await Promise.all([
-        asJson("/stats"), asJson("/roadmap"), asJson("/phases"), asJson("/state")
+    
+    let data = {};
+
+    async function load() {
+      const [stats, roadmap, phases, codebase, state, bmm] = await Promise.all([
+        asJson("/stats"), asJson("/roadmap"), asJson("/phases"), asJson("/codebase"), asJson("/state"), asJson("/bmm")
       ]);
-      document.getElementById("stats").textContent = JSON.stringify(stats, null, 2);
-      document.getElementById("roadmap").innerHTML = roadmap.map((p) => `<li>Phase ${p.number}: ${p.title}</li>`).join("") || "<li>No roadmap phases.</li>";
-      document.getElementById("phases").innerHTML = phases.map((p) => `<li>${p.id}</li>`).join("") || "<li>No phase files.</li>";
-      document.getElementById("state").textContent = state.content || "No STATE.md found.";
+      data = { stats, roadmap, phases, codebase, state, bmm };
+      show('overview');
     }
-    render().catch((e) => {
-      document.getElementById("stats").textContent = `Failed to load API: ${e.message}`;
+
+    function show(view) {
+      document.querySelectorAll('.nav-item').forEach(el => {
+        el.classList.toggle('active', el.textContent.toLowerCase().includes(view));
+      });
+
+      const main = document.getElementById('content');
+      if (view === 'overview') {
+        main.innerHTML = `
+          <h1>Project Overview</h1>
+          <div class="grid">
+            <div class="card">
+              <h3>Progress</h3>
+              <div style="font-size: 48px; font-weight: bold;">${data.stats.progress}%</div>
+              <p style="color: var(--text-dim);">Milestone: ${data.stats.milestone}</p>
+            </div>
+            <div class="card">
+              <h3>Inventory</h3>
+              <p>${data.roadmap.length} Roadmap Phases</p>
+              <p>${data.stats.plansCount} Intelligence Docs</p>
+            </div>
+            <div class="card" style="grid-column: span 2;">
+              <h3>Current State</h3>
+              <pre>${data.state.content || 'No STATE.md found'}</pre>
+            </div>
+          </div>
+        `;
+      } else if (view === 'roadmap') {
+        main.innerHTML = `
+          <h1>Roadmap</h1>
+          <div class="card">
+            <div class="phase-list">
+              ${data.roadmap.map(p => `
+                <div class="phase-item">
+                  <span><strong>Phase ${p.number}</strong>: ${p.title}</span>
+                  <span class="badge">${p.status}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      } else if (view === 'phases') {
+        main.innerHTML = `
+          <h1>Active Phases & Plans</h1>
+          <div class="grid">
+            ${data.phases.map(p => `
+              <div class="card">
+                <span class="badge">Phase ${p.phase}</span>
+                <h3>${p.title}</h3>
+                <pre style="max-height: 200px; font-size: 11px;">${p.content.substring(0, 500)}...</pre>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      } else if (view === 'codebase') {
+        main.innerHTML = `
+          <h1>Codebase Map</h1>
+          <p style="color: var(--text-dim); margin-bottom: 24px;">Data generated by <code>/gsd-map-codebase</code></p>
+          <div class="grid">
+            ${data.codebase.length ? data.codebase.map(doc => `
+              <div class="card">
+                <h3>${doc.title}</h3>
+                <pre style="max-height: 300px; font-size: 11px;">${doc.content}</pre>
+              </div>
+            `).join('') : '<div class="card" style="grid-column: span 3;">No codebase map found. Run <code>/gsd-map-codebase</code> to generate understanding.</div>'}
+          </div>
+        `;
+      } else if (view === 'bmm') {
+        main.innerHTML = `
+          <h1>BMM Strategic Status</h1>
+          <p style="color: var(--text-dim); margin-bottom: 24px;">Strategic Decision Making Method Alignment</p>
+          <div class="grid">
+            ${Object.entries(data.bmm).map(([name, info]) => `
+              <div class="card" style="border-left: 4px solid ${info.status === 'completed' ? '#2da44e' : info.status === 'in-progress' ? '#3b82f6' : '#27272a'}">
+                <div style="font-size: 24px; margin-bottom: 8px;">${info.icon}</div>
+                <h3>${name}</h3>
+                <span class="badge" style="background: ${info.status === 'completed' ? '#065f46' : info.status === 'in-progress' ? '#1e40af' : '#27272a'}">${info.status}</span>
+              </div>
+            `).join('')}
+          </div>
+          <div class="card" style="margin-top: 24px;">
+            <h3>BMM Methodology</h3>
+            <p style="color: var(--text-dim);">This project follows the 4 pillars of the Strategic Decision Making Method (BMM). Each pillar ensures structural and strategic integrity.</p>
+          </div>
+        `;
+      }
+    }
+
+    load().catch(e => {
+      document.getElementById('content').innerHTML = `<h1>Error</h1><p>${e.message}</p>`;
     });
   </script>
 </body>
 </html>
-
