@@ -1,7 +1,7 @@
 import os from "node:os";
 import path from "node:path";
 import readline from "node:readline/promises";
-import { METHODS, resolveMethod, ensurePort, readManifest, openBrowser } from "../../core/src/index.js";
+import { METHODS, resolveMethod, ensurePort, readManifest, openBrowser, spawnDetached } from "../../core/src/index.js";
 import { getAdapter } from "../../adapters/src/index.js";
 
 async function ask(question) {
@@ -26,6 +26,7 @@ const COMMANDS = {
   install: runInstall,
   update: runUpdate,
   start: runStart,
+  serve: runServe,
   status: runStatus,
   doctor: runDoctor,
   version: runVersion,
@@ -226,12 +227,41 @@ async function runVersion() {
   console.log("source: local");
 }
 
+async function runServe(flags) {
+  const port = ensurePort(flags.port, 3000);
+  const appPath = path.join(repoRoot, "packages/ui-core/app.py");
+  const uiUrl = `http://localhost:${port}`;
+
+  if (flags["dry-run"]) {
+    console.log(`[serve] would start unified dashboard at ${uiUrl}`);
+    console.log(`[serve] command: python3 ${appPath}`);
+    return;
+  }
+
+  console.log(`Starting unified dashboard at ${uiUrl}...`);
+  
+  try {
+    spawnDetached("python3", [appPath], {
+      env: { ...process.env, PORT: port.toString() }
+    });
+    
+    console.log(`Dashboard process spawned.`);
+    
+    // Give it a moment to start before opening browser
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    await openBrowser(uiUrl);
+  } catch (error) {
+    throw new Error(`Failed to start dashboard: ${error.message}`);
+  }
+}
+
 async function runHelp() {
   console.log("sdd-ui commands:");
   console.log("  sdd-ui bootstrap <bmad|gsd|spec-kit|all> [--target-dir <path>] [--dry-run]");
   console.log("  sdd-ui install <bmad|gsd|spec-kit|all> [--project <path>]");
   console.log("  sdd-ui update <bmad|gsd|spec-kit|all> [--project <path>]");
   console.log("  sdd-ui start <bmad|gsd|spec-kit> --project <path> [--port <number>] [--auto-bootstrap]");
+  console.log("  sdd-ui serve [--port <number>] [--dry-run]");
   console.log("  sdd-ui status <bmad|gsd|spec-kit|all> [--project <path>]");
   console.log("  sdd-ui doctor <bmad|gsd|spec-kit|all> [--target-dir <path>]");
   console.log("  sdd-ui version");
