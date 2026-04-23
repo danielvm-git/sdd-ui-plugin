@@ -14,13 +14,28 @@ const elements = {
     projectTitle: document.getElementById('current-project-title'),
     addSourceBtnSidebar: document.getElementById('add-source-btn-sidebar'),
     onboardingOverlay: document.getElementById('onboarding-overlay'),
-    closeOnboardingBtn: document.getElementById('close-onboarding')
+    closeOnboardingBtn: document.getElementById('close-onboarding'),
+    
+    // Add Source Modal elements
+    addSourceModal: document.getElementById('add-source-modal'),
+    closeModalBtn: document.getElementById('close-modal'),
+    cancelAddSourceBtn: document.getElementById('cancel-add-source'),
+    confirmAddSourceBtn: document.getElementById('confirm-add-source'),
+    sourceNameInput: document.getElementById('source-name'),
+    sourcePathInput: document.getElementById('source-path'),
+    directoryPickerContainer: document.getElementById('directory-picker-container'),
+    pickDirectoryBtn: document.getElementById('pick-directory-btn')
 };
 
 /**
  * Initialize the application
  */
 async function init() {
+    // Check if directory picker is available
+    if ('showDirectoryPicker' in window) {
+        elements.directoryPickerContainer.classList.remove('hidden');
+    }
+
     // Initialize Lucide icons
     if (window.lucide) {
         window.lucide.createIcons();
@@ -56,6 +71,74 @@ async function fetchSources() {
     } catch (error) {
         console.error('Failed to fetch sources:', error);
         state.sources = [];
+    }
+}
+
+/**
+ * Add a new source via the API
+ */
+async function addSource(name, path) {
+    try {
+        const response = await fetch('/api/registry', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name, path, type: 'local' })
+        });
+
+        if (response.ok) {
+            const newSource = await response.json();
+            state.sources.push(newSource);
+            state.currentSource = newSource.id;
+            hideAddSourceModal();
+            render();
+            return true;
+        } else {
+            const error = await response.json();
+            alert(`Failed to add source: ${error.error || 'Unknown error'}`);
+            return false;
+        }
+    } catch (error) {
+        console.error('Error adding source:', error);
+        alert('An error occurred while adding the source.');
+        return false;
+    }
+}
+
+/**
+ * Show the Add Source modal
+ */
+function showAddSourceModal() {
+    elements.addSourceModal.classList.remove('hidden');
+    elements.sourceNameInput.value = '';
+    elements.sourcePathInput.value = '';
+    elements.sourceNameInput.focus();
+}
+
+/**
+ * Hide the Add Source modal
+ */
+function hideAddSourceModal() {
+    elements.addSourceModal.classList.add('hidden');
+}
+
+/**
+ * Pick a directory using the Browser API
+ */
+async function pickDirectory() {
+    try {
+        const dirHandle = await window.showDirectoryPicker();
+        elements.sourceNameInput.value = dirHandle.name;
+        // Note: Full path is not available via showDirectoryPicker for security reasons
+        // But for this local tool, we might need to ask the user to confirm the absolute path
+        // OR we can try to infer it if we're running in a context where we know the root.
+        // For now, we'll just put the name and let the user fill the path or use the name as a hint.
+        alert('Browser security prevents getting the full absolute path automatically. Please paste the absolute path in the input field.');
+    } catch (err) {
+        if (err.name !== 'AbortError') {
+            console.error(err);
+        }
     }
 }
 
@@ -115,8 +198,18 @@ function renderMainArea() {
     elements.mainArea.innerHTML = `
         <div class="project-dashboard">
             <h2>Dashboard for ${source ? source.name : 'Unknown'}</h2>
-            <p>Project path: ${source ? source.path : 'N/A'}</p>
+            <p>Project path: <code>${source ? source.path : 'N/A'}</code></p>
             <p>Status: Monitoring...</p>
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h3>Recent Status</h3>
+                    <p>No status reports found.</p>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Quick Actions</h3>
+                    <button class="btn-secondary">Open Roadmap</button>
+                </div>
+            </div>
         </div>
     `;
 }
@@ -140,9 +233,7 @@ function renderEmptyState() {
 
     const addSourceBtnMain = document.getElementById('add-source-btn-main');
     if (addSourceBtnMain) {
-        addSourceBtnMain.addEventListener('click', () => {
-            alert('Add Source functionality coming in Plan 03!');
-        });
+        addSourceBtnMain.addEventListener('click', showAddSourceModal);
     }
 }
 
@@ -165,8 +256,19 @@ function setupEventListeners() {
         elements.onboardingOverlay.classList.add('hidden');
     });
 
-    elements.addSourceBtnSidebar.addEventListener('click', () => {
-        alert('Add Source functionality coming in Plan 03!');
+    elements.addSourceBtnSidebar.addEventListener('click', showAddSourceModal);
+    elements.closeModalBtn.addEventListener('click', hideAddSourceModal);
+    elements.cancelAddSourceBtn.addEventListener('click', hideAddSourceModal);
+    elements.pickDirectoryBtn.addEventListener('click', pickDirectory);
+
+    elements.confirmAddSourceBtn.addEventListener('click', () => {
+        const name = elements.sourceNameInput.value.trim();
+        const path = elements.sourcePathInput.value.trim();
+        if (name && path) {
+            addSource(name, path);
+        } else {
+            alert('Please provide both a name and an absolute path.');
+        }
     });
 
     // Use event delegation for sidebar items
@@ -177,14 +279,6 @@ function setupEventListeners() {
             render();
         }
     });
-
-    // Handle initial empty state button if present
-    const addSourceBtnMain = document.getElementById('add-source-btn-main');
-    if (addSourceBtnMain) {
-        addSourceBtnMain.addEventListener('click', () => {
-            alert('Add Source functionality coming in Plan 03!');
-        });
-    }
 }
 
 // Start the app

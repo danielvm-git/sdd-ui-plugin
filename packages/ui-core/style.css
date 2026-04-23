@@ -184,3 +184,124 @@ body {
 .hidden {
     display: none !important;
 }
+
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: var(--bg-secondary);
+    border-radius: 8px;
+    width: 100%;
+    max-width: 500px;
+    border: 1px solid #27272a;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-header {
+    padding: var(--lg);
+    border-bottom: 1px solid #27272a;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-body {
+    padding: var(--lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--md);
+}
+
+.modal-footer {
+    padding: var(--lg);
+    border-top: 1px solid #27272a;
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--md);
+}
+
+/* Forms */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--xs);
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.form-group input {
+    background-color: #09090b;
+    border: 1px solid #27272a;
+    color: var(--text-primary);
+    padding: var(--sm) var(--md);
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.btn-icon {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--xs);
+    border-radius: 4px;
+}
+
+.btn-icon:hover {
+    background-color: #27272a;
+    color: var(--text-primary);
+}
+
+/* Sidebar Items */
+.sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: var(--sm);
+    padding: var(--sm) var(--md);
+    border-radius: 4px;
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: all 0.2s;
+}
+
+.sidebar-item:hover {
+    background-color: #27272a;
+    color: var(--text-primary);
+}
+
+.sidebar-item.active {
+    background-color: #27272a;
+    color: var(--text-primary);
+    border-left: 2px solid var(--accent);
+}
+
+.sidebar-item.empty {
+    cursor: default;
+    font-style: italic;
+    font-size: 14px;
+}
+
