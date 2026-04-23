@@ -35,8 +35,8 @@ class GSDHandler(http.server.SimpleHTTPRequestHandler):
             self.send_phases()
         elif self.path == "/api/state":
             self.send_file_content("STATE.md")
-        elif self.path == "/api/project":
-            self.send_file_content("PROJECT.md")
+        elif self.path == "/api/codebase":
+            self.send_codebase()
         else:
             super().do_GET()
 
@@ -100,6 +100,24 @@ class GSDHandler(http.server.SimpleHTTPRequestHandler):
                             "phase": file_name.split("-")[0]
                         })
         self.send_json(files)
+
+    def send_codebase(self):
+        codebase_dir = os.path.join(TARGET_DIR, ".planning", "codebase")
+        docs = []
+        if os.path.exists(codebase_dir):
+            for file_name in os.listdir(codebase_dir):
+                if file_name.endswith(".md"):
+                    with open(os.path.join(codebase_dir, file_name), "r", encoding="utf-8") as handle:
+                        content = handle.read()
+                        meta, body = get_frontmatter(content)
+                        docs.append({
+                            "id": file_name[:-3],
+                            "filename": file_name,
+                            "title": meta.get("title", file_name[:-3]),
+                            "content": body,
+                            "metadata": meta
+                        })
+        self.send_json(docs)
 
     def send_file_content(self, filename):
         file_path = os.path.join(TARGET_DIR, filename)
