@@ -43,8 +43,8 @@ The ONE thing that must work: Providing a single, clear, and actionable visualiz
 - [ ] [UI-01] Workflow status tracking UI (emulating `workflow-status.html`).
 - [ ] [UI-02] Card-based visualization for phases and requirements.
 - [ ] [UI-03] "Click-to-copy" terminal command interactions.
-- [ ] [CORE-01] Lightweight Python backend for serving JSON API.
-- [ ] [CORE-02] Dynamic source management (add local folders).
+- [x] [CORE-01] Lightweight Python backend for serving JSON API.
+- [x] [CORE-02] Dynamic source management (add local folders).
 - [ ] [CORE-03] GitHub repository source support.
 
 ### Out of Scope
