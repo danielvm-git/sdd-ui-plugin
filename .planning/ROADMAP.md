@@ -19,7 +19,10 @@
   1. User can start the Python server and access the UI in a browser.
   2. User can add a local directory as a source via the UI.
   3. Added sources persist in the sidebar after refreshing the page or restarting the server.
-**Plans**: TBD
+**Plans**:
+- [ ] 01-01-PLAN.md — Unified Backend & Registry
+- [ ] 01-02-PLAN.md — Core UI Shell & Onboarding
+- [ ] 01-03-PLAN.md — Source Management & CLI Integration
 **UI hint**: yes
 
 ### Phase 2: Project Detection & Status
@@ -81,7 +84,7 @@
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Registry | 0/1 | Not started | - |
+| 1. Foundation & Registry | 0/3 | In progress | - |
 | 2. Project Detection & Status | 0/1 | Not started | - |
 | 3. Roadmap Visualization | 0/1 | Not started | - |
 | 4. Traceability & Details | 0/1 | Not started | - |
