@@ -32,4 +32,19 @@
 - Generic Markdown editor (the UI is for observability and orchestration, not general writing).
 
 ## Traceability
-*(To be populated by roadmap)*
+
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| SRC-01 | Phase 1 | Pending |
+| SRC-02 | Phase 6 | Pending |
+| SRC-03 | Phase 2 | Pending |
+| SRC-04 | Phase 2 | Pending |
+| SRC-05 | Phase 1 | Pending |
+| OBS-01 | Phase 2 | Pending |
+| OBS-02 | Phase 3 | Pending |
+| OBS-03 | Phase 3 | Pending |
+| OBS-04 | Phase 4 | Pending |
+| OBS-05 | Phase 4 | Pending |
+| INT-01 | Phase 5 | Pending |
+| INT-02 | Phase 5 | Pending |
+| INT-03 | Phase 2 | Pending |
