@@ -7,7 +7,7 @@
 - [ ] **SRC-02**: User can add remote GitHub repositories as project sources.
 - [ ] **SRC-03**: Sidebar navigation for managing and switching between multiple sources (Lean Spec pattern).
 - [ ] **SRC-04**: Auto-detection of SDD methods (GSD, BMAD, Spec-Kit) within a source.
-- [ ] **SRC-05**: Persistent registry for saved project sources.
+- [x] **SRC-05**: Persistent registry for saved project sources.
 
 ### Observability & Status
 - [ ] **OBS-01**: Unified Workflow Status dashboard (emulating `workflow-status.html`).
@@ -39,7 +39,7 @@
 | SRC-02 | Phase 6 | Pending |
 | SRC-03 | Phase 2 | Pending |
 | SRC-04 | Phase 2 | Pending |
-| SRC-05 | Phase 1 | Pending |
+| SRC-05 | Phase 1 | Complete |
 | OBS-01 | Phase 2 | Pending |
 | OBS-02 | Phase 3 | Pending |
 | OBS-03 | Phase 3 | Pending |

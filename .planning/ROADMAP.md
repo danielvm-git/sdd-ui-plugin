@@ -20,7 +20,7 @@
   2. User can add a local directory as a source via the UI.
   3. Added sources persist in the sidebar after refreshing the page or restarting the server.
 **Plans**:
-- [ ] 01-01-PLAN.md — Unified Backend & Registry
+- [x] 01-01-PLAN.md — Unified Backend & Registry
 - [ ] 01-02-PLAN.md — Core UI Shell & Onboarding
 - [ ] 01-03-PLAN.md — Source Management & CLI Integration
 **UI hint**: yes
@@ -84,7 +84,7 @@
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Registry | 0/3 | In progress | - |
+| 1. Foundation & Registry | 1/3 | In Progress|  |
 | 2. Project Detection & Status | 0/1 | Not started | - |
 | 3. Roadmap Visualization | 0/1 | Not started | - |
 | 4. Traceability & Details | 0/1 | Not started | - |
