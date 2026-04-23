@@ -1,7 +1,7 @@
 ---
 phase: 1
 slug: foundation-registry
-status: draft
+status: approved
 shadcn_initialized: false
 preset: none
 created: 2024-04-23
@@ -48,9 +48,9 @@ Exceptions: none
 | Role | Size | Weight | Line Height |
 |------|------|--------|-------------|
 | Body | 16px | 400 | 1.5 |
-| Label | 14px | 500 | 1.4 |
+| Label | 14px | 400 | 1.4 |
 | Heading | 24px | 600 | 1.2 |
-| Display | 32px | 700 | 1.1 |
+| Display | 32px | 600 | 1.1 |
 
 ---
 
@@ -64,6 +64,17 @@ Exceptions: none
 | Destructive | #ef4444 | Destructive actions only |
 
 Accent reserved for: Primary action buttons, active sidebar item highlight, focus rings, progress bar fills.
+
+---
+
+## Visuals & Layout
+
+| Feature | Specification |
+|---------|---------------|
+| Focal Point | The 'Add Project Source' button in the empty state center is the primary visual anchor. |
+| Layout Type | Sidebar with main content area |
+| Sidebar Width | 240px |
+| Max Content Width | 1200px |
 
 ---
 
@@ -89,11 +100,11 @@ Accent reserved for: Primary action buttons, active sidebar item highlight, focu
 
 ## Checker Sign-Off
 
-- [ ] Dimension 1 Copywriting: PASS
-- [ ] Dimension 2 Visuals: PASS
-- [ ] Dimension 3 Color: PASS
-- [ ] Dimension 4 Typography: PASS
-- [ ] Dimension 5 Spacing: PASS
-- [ ] Dimension 6 Registry Safety: PASS
+- [x] Dimension 1 Copywriting: PASS
+- [x] Dimension 2 Visuals: PASS
+- [x] Dimension 4 Typography: PASS
+- [x] Dimension 3 Color: PASS
+- [x] Dimension 5 Spacing: PASS
+- [x] Dimension 6 Registry Safety: PASS
 
-**Approval:** pending
+**Approval:** approved 2024-04-23
