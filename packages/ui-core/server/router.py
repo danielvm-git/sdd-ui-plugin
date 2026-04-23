@@ -6,6 +6,9 @@ class Router:
             'GET': {
                 '/api/health': Handlers.health,
                 '/api/registry': Handlers.get_registry,
+            },
+            'POST': {
+                '/api/registry': Handlers.post_registry,
             }
         }
 
