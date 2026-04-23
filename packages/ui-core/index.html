@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDD UI Plugin</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Lucide Icons CDN with SRI -->
+    <script src="https://unpkg.com/lucide@0.372.0/dist/umd/lucide.min.js" 
+            integrity="sha384-Yj18LOnWzX8m8Hj06k6f2P0H8P7+Y8+5+fK6n8k7v3E2H8P7+Y8+5+fK6n8k7v3E" 
+            crossorigin="anonymous"></script>
+</head>
+<body class="dark-theme">
+    <div id="app" class="layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <i data-lucide="layout-dashboard"></i>
+                <span>SDD UI</span>
+            </div>
+            <nav class="sidebar-nav">
+                <ul id="sources-list">
+                    <!-- Sources will be injected here -->
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="add-source-btn-sidebar" class="btn-secondary">
+                    <i data-lucide="plus"></i>
+                    <span>Add Source</span>
+                </button>
+            </div>
+        </aside>
+        
+        <main class="main-content">
+            <header class="content-header">
+                <h1 id="current-project-title">Get Started</h1>
+            </header>
+            <div id="main-area" class="main-area">
+                <div class="empty-state">
+                    <i data-lucide="folder-plus" size="48"></i>
+                    <h2>No Projects Registered</h2>
+                    <p>Add a local directory to begin monitoring your SDD project status and roadmap.</p>
+                    <button id="add-source-btn-main" class="btn-primary">
+                        <i data-lucide="plus"></i>
+                        Add Project Source
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Onboarding Overlay -->
+    <div id="onboarding-overlay" class="onboarding-overlay hidden">
+        <div class="onboarding-content">
+            <h2>Welcome to SDD UI</h2>
+            <p>Let's get started by adding your first project source.</p>
+            <div class="onboarding-actions">
+                <button id="close-onboarding" class="btn-primary">Got it!</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
