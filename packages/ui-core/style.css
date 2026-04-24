@@ -2,10 +2,14 @@
     --bg-dominant: #09090b;
     --bg-secondary: #18181b;
     --accent: #3b82f6;
+    --primary: #3b82f6;
     --destructive: #ef4444;
     --text-primary: #ffffff;
     --text-secondary: #a1a1aa;
-    
+    --text-dim: #94a3b8;
+    --border: #27272a;
+    --card-bg: #111827;
+
     --xs: 4px;
     --sm: 8px;
     --md: 16px;
@@ -279,7 +283,8 @@ body {
 /* Sidebar Items */
 .sidebar-item {
     display: flex;
-    align-items: center;
+    flex-wrap: wrap;
+    align-items: flex-start;
     gap: var(--sm);
     padding: var(--sm) var(--md);
     border-radius: 4px;
@@ -303,5 +308,123 @@ body {
     cursor: default;
     font-style: italic;
     font-size: 14px;
+}
+
+.sidebar-name {
+    flex: 1;
+    min-width: 0;
+}
+
+.method-badges {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    width: 100%;
+    margin-top: 4px;
+    padding-left: 28px;
+}
+
+.method-badge {
+    font-size: 12px;
+    padding: 4px 8px;
+    border: 1px solid var(--border, #27272a);
+    border-radius: 9999px;
+    color: var(--text-dim, #94a3b8);
+}
+
+.method-badge--warn {
+    border-color: var(--destructive);
+    color: var(--destructive);
+}
+
+.sidebar-item.active .method-badge {
+    border-color: var(--primary, #3b82f6);
+}
+
+/* Overview — Current status (phase 2) */
+.section-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.subheading {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.dashboard-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.overview-path-line {
+    margin-bottom: 24px;
+    color: var(--text-secondary);
+}
+
+.overview-path-line code {
+    font-size: 14px;
+    word-break: break-all;
+}
+
+.text-dim {
+    font-size: 12px;
+    color: var(--text-dim);
+}
+
+.text-muted {
+    color: var(--text-secondary);
+}
+
+.current-focus {
+    padding: 16px;
+    border: 1px solid var(--border, #27272a);
+    border-radius: 16px;
+    background: var(--card-bg, #111827);
+    margin-bottom: 24px;
+    transition: opacity 0.15s ease;
+}
+
+.current-focus--pulse {
+    opacity: 0.85;
+}
+
+.current-focus__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    margin-bottom: 8px;
+    font-size: 16px;
+}
+
+.current-focus__label {
+    font-weight: 600;
+    min-width: 5rem;
+    font-size: 12px;
+    color: var(--text-dim, #94a3b8);
+}
+
+.current-focus__value {
+    flex: 1;
+    min-width: 0;
+}
+
+.status-actions {
+    margin-top: 16px;
+    margin-bottom: 8px;
+}
+
+.status-actions .btn-primary {
+    width: auto;
+}
+
+.last-updated {
+    font-size: 12px;
+    color: var(--text-dim, #94a3b8);
+    margin-top: 8px;
 }
 

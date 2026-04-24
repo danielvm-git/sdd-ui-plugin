@@ -43,6 +43,13 @@ class RegistryManager:
     def get_all(self):
         return self.load()
 
+    def get_by_id(self, source_id: str):
+        """Return registry entry for id (stringified ms timestamp from Phase 1) or None."""
+        for item in self.load():
+            if str(item.get("id")) == str(source_id):
+                return item
+        return None
+
     def add_source(self, name, path, source_type='unknown'):
         # T-01-01-02: Validate path exists and is absolute
         if not os.path.isabs(path):
