@@ -60,7 +60,7 @@ Per `.planning/ROADMAP.md`, this phase delivers a **browser-native, card-based v
 ### Reference UI
 - `workflow-status.html` (repo root) — **loose** reference for “where am I in the program” (Phase 2 context); Roadmap is **card/dashboard** not a copy of that file
 
-**Note:** `03-01-SUMMARY.md` / `03-02-SUMMARY.md` in this folder are **orphan notes** from earlier WIP and may not match `main` — **replace** with new plans and summaries that follow this CONTEXT.
+**Note:** Stale WIP `03-0x-SUMMARY` stubs were removed; new summaries will be produced by executing `03-01-PLAN` / `03-02-PLAN`.
 
 </canonical_refs>
 

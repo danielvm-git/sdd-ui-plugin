@@ -46,7 +46,9 @@
   1. User can view the ROADMAP.md content rendered as a multi-column card layout.
   2. Progress bars accurately reflect the percentage of completed requirements/phases.
   3. User can toggle between different views (e.g., summary vs. full roadmap).
-**Plans**: TBD
+**Plans**:
+- [ ] 03-01-PLAN.md — Roadmap parse + GET /api/source/roadmap
+- [ ] 03-02-PLAN.md — Roadmap UI: tabs, grid, Summary/Full, polling
 **UI hint**: yes
 
 ### Phase 4: Traceability & Details
@@ -88,7 +90,7 @@
 |-------|----------------|--------|-----------|
 | 1. Foundation & Registry | 2/3 | In Progress|  |
 | 2. Project Detection & Status | 2/2 | Complete | 2026-04-24 |
-| 3. Roadmap Visualization | 0/1 | Not started | - |
+| 3. Roadmap Visualization | 0/2 | Ready to execute | - |
 | 4. Traceability & Details | 0/1 | Not started | - |
 | 5. Terminal & IDE Bridge | 0/1 | Not started | - |
 | 6. Remote Sources | 0/1 | Not started | - |
