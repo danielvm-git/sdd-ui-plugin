@@ -3,7 +3,7 @@
 ## Phases
 
 - [ ] **Phase 1: Foundation & Registry** - Establish Python backend and persistent local project source management.
-- [ ] **Phase 2: Project Detection & Status** - Auto-detect SDD methods and visualize high-level workflow status.
+- [x] **Phase 2: Project Detection & Status** - Auto-detect SDD methods and visualize high-level workflow status. (2026-04-24)
 - [ ] **Phase 3: Roadmap Visualization** - Render project roadmaps as interactive, card-based dashboards with progress tracking.
 - [ ] **Phase 4: Traceability & Details** - Enable deep-dive views for phases/plans and visual requirement traceability.
 - [ ] **Phase 5: Terminal & IDE Bridge** - Integrate click-to-copy commands and "Open in IDE" shortcuts.
@@ -33,7 +33,9 @@
   1. UI correctly identifies if a source is GSD, BMAD, or Spec-Kit.
   2. Dashboard displays the "Current Focus" (Phase/Plan) from the source's STATE.md.
   3. UI updates automatically (or via fast polling) when the underlying STATE.md file changes.
-**Plans**: TBD
+**Plans**:
+- [x] 02-01-PLAN.md — Per-source detection & STATE.md overview API
+- [x] 02-02-PLAN.md — Dashboard UI: badges, Current Focus, polling, refresh
 **UI hint**: yes
 
 ### Phase 3: Roadmap Visualization
@@ -85,7 +87,7 @@
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation & Registry | 2/3 | In Progress|  |
-| 2. Project Detection & Status | 0/1 | Not started | - |
+| 2. Project Detection & Status | 2/2 | Complete | 2026-04-24 |
 | 3. Roadmap Visualization | 0/1 | Not started | - |
 | 4. Traceability & Details | 0/1 | Not started | - |
 | 5. Terminal & IDE Bridge | 0/1 | Not started | - |
